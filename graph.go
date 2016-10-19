@@ -27,6 +27,29 @@ type Graph struct {
 	edge_size int
 }
 
+func (g *Graph) buildEdge() {
+	tmp := make(map[string]int)
+	id := 0
+	for from, v := range g.VertexArray {
+		for _, e := range v.edge {
+			var buf string
+			if from <= e.to {
+				buf = fmt.Sprintf("%d %d %d", from, e.to, e.elabel)
+			} else {
+				buf = fmt.Sprintf("%d %d %d", e.to, from, e.elabel)
+			}
+			if v, ok := tmp[buf]; ok {
+				e.id = v
+			} else {
+				e.id = id
+				tmp[buf] = id
+				id++
+			}
+		}
+	}
+	g.edge_size = id
+}
+
 func (g *Graph) read(br *bufio.Reader) (eof bool) {
 	eof = false
 	g.VertexArray = make(VertexArray, 0)
@@ -55,27 +78,7 @@ func (g *Graph) read(br *bufio.Reader) (eof bool) {
 		}
 	}
 
-	tmp := make(map[string]int)
-	id := 0
-	for from, v := range g.VertexArray {
-		for _, e := range v.edge {
-			var buf string
-			if from <= e.to {
-				buf = fmt.Sprintf("%d %d %d", from, e.to, e.elabel)
-			} else {
-				buf = fmt.Sprintf("%d %d %d", e.to, from, e.elabel)
-			}
-			if v, ok := tmp[buf]; ok {
-				e.id = v
-			} else {
-				e.id = id
-				tmp[buf] = id
-				id++
-			}
-		}
-	}
-	g.edge_size = id
-
+	g.buildEdge()
 	return eof
 }
 
@@ -116,4 +119,15 @@ func BuildGraphFromFile(fileName string) (gs []Graph, err error) {
 	}
 
 	return gs, nil
+}
+
+func getForwardRoot(g *Graph, v *Vertex) (edgeList []*Edge) {
+	edgeList = make([]*Edge, 0)
+	for i, e := range v.edge {
+		assert(e.to >= 0 && e.to < len(g.VertexArray))
+		if v.label <= g.VertexArray[e.to].label {
+			edgeList = append(edgeList, &v.edge[i])
+		}
+	}
+	return edgeList
 }

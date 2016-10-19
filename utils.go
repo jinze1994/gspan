@@ -11,6 +11,22 @@ func assert(ok bool, args ...interface{}) {
 	}
 }
 
+func maxint(a, b int) int {
+	if a > b {
+		return a
+	} else {
+		return b
+	}
+}
+
+func minint(a, b int) int {
+	if a < b {
+		return a
+	} else {
+		return b
+	}
+}
+
 func str2int(str string) int {
 	n, err := strconv.Atoi(str)
 	assert(err == nil)
