@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"sort"
 )
 
 type Edge struct {
@@ -31,16 +32,18 @@ func (g *Graph) buildEdge() {
 	tmp := make(map[string]int)
 	id := 0
 	for from, v := range g.VertexArray {
-		for _, e := range v.edge {
+		for i, e := range v.edge {
 			var buf string
 			if from <= e.to {
 				buf = fmt.Sprintf("%d %d %d", from, e.to, e.elabel)
 			} else {
 				buf = fmt.Sprintf("%d %d %d", e.to, from, e.elabel)
 			}
-			if v, ok := tmp[buf]; ok {
-				e.id = v
+			if l, ok := tmp[buf]; ok {
+				g.VertexArray[from].edge[i].id = l
+				e.id = l
 			} else {
+				g.VertexArray[from].edge[i].id = id
 				e.id = id
 				tmp[buf] = id
 				id++
@@ -83,17 +86,47 @@ func (g *Graph) read(br *bufio.Reader) (eof bool) {
 }
 
 func (g *Graph) write(fout *os.File) {
-	estr := make([]string, 0)
+	mstr := make(map[string]bool)
 	for from, v := range g.VertexArray {
 		fout.WriteString(fmt.Sprintf("v %d %d\n", from, v.label))
 		for _, e := range v.edge {
-			if from < e.to {
-				estr = append(estr, fmt.Sprintf("e %d %d %d\n", from, e.to, e.elabel))
+			if from <= e.to {
+				mstr[fmt.Sprintf("e %d %d %d\n", from, e.to, e.elabel)] = true
+			} else {
+				mstr[fmt.Sprintf("e %d %d %d\n", e.to, from, e.elabel)] = true
 			}
 		}
 	}
+	estr := make([]string, 0, len(mstr))
+	for str, _ := range mstr {
+		estr = append(estr, str)
+	}
+	sort.Strings(estr)
 	for _, str := range estr {
 		fout.WriteString(str)
+	}
+}
+
+func (g *Graph) check() {
+	b := make([][]int, len(g.VertexArray))
+	for i := range b {
+		b[i] = make([]int, len(g.VertexArray))
+	}
+	for from, v := range g.VertexArray {
+		assert(v.label >= 2)
+		eid := make(map[int]bool)
+		for _, e := range v.edge {
+			assert(e.from == from)
+			assert(eid[e.id] == false)
+			eid[e.id] = true
+			assert(b[e.from][e.to] == 0)
+			b[e.from][e.to] = e.elabel
+		}
+	}
+	for i := range b {
+		for j := i; j < len(b[i]); j++ {
+			assert(b[i][j] == b[j][i])
+		}
 	}
 }
 

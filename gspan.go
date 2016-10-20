@@ -72,3 +72,5 @@ func run() {
 
 func project(projected Projected) {
 }
+
+var TRANS []Graph
