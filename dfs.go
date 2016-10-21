@@ -5,18 +5,14 @@ import (
 	"os"
 )
 
+// 记录一个边的信息，包括其 vertex_id, vertex_label, edge_label
 type DFS struct {
 	from, to, fromlabel, elabel, tolabel int
 }
 
-func (d *DFS) Equal(d2 *DFS) bool {
-	if d.from == d2.from && d.to == d2.to && d.fromlabel == d2.fromlabel && d.elabel == d2.elabel && d.tolabel == d2.tolabel {
-		return true
-	} else {
-		return false
-	}
-}
-
+/* 一个图的 DFSCode，DFSCode 相同等价于图同构
+   DFSCode 中包含了图的所有边
+*/
 type DFSCode []DFS
 
 func (dc *DFSCode) push(from, to, fromlabel, elabel, tolabel int) {
@@ -29,9 +25,11 @@ func (dc *DFSCode) pop() {
 	}
 }
 
+// 从一个图中构建 DFSCode，注意需要保证图 g 连通
 func (dc *DFSCode) fromGraph(g *Graph) {
 	*dc = make(DFSCode, 0)
 	for from, v := range g.VertexArray {
+		// 找到在所有 v 的临边中，相连的节点 nei.label 比 v.label 大的边，目的是对无向图中的双连接去重
 		edgeList := g.getForwardRoot(&v)
 		for _, e := range edgeList {
 			assert(e.from == from)
@@ -40,6 +38,7 @@ func (dc *DFSCode) fromGraph(g *Graph) {
 	}
 }
 
+// 将 DFSCode 转化为一个图
 func (dc *DFSCode) toGraph(g *Graph) {
 	g.VertexArray = make(VertexArray, dc.nodeCount())
 
@@ -58,6 +57,7 @@ func (dc *DFSCode) toGraph(g *Graph) {
 	g.buildEdge()
 }
 
+// 获得 DFSCode 所代表的图中的节点数
 func (dc *DFSCode) nodeCount() int {
 	nodeCount := 0
 	for i := 0; i < len(*dc); i++ {
@@ -66,6 +66,7 @@ func (dc *DFSCode) nodeCount() int {
 	return nodeCount
 }
 
+// 打印 DFSCode
 func (dc DFSCode) write(fout *os.File) {
 	if len(dc) == 0 {
 		return
@@ -81,6 +82,7 @@ func (dc DFSCode) write(fout *os.File) {
 	}
 }
 
+// 在 DFSCode 上获取最右路径
 func (dc *DFSCode) buildRMPath() []int {
 	rmpath := make([]int, 0)
 	old_from := -1

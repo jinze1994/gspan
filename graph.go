@@ -28,6 +28,7 @@ type Graph struct {
 	edge_size int
 }
 
+// 赋予每条边一个唯一的标号 id
 func (g *Graph) buildEdge() {
 	tmp := make(map[string]int)
 	id := 0
@@ -53,6 +54,7 @@ func (g *Graph) buildEdge() {
 	g.edge_size = id
 }
 
+// 从输入中读取一个图
 func (g *Graph) read(br *bufio.Reader) (eof bool) {
 	eof = false
 	g.VertexArray = make(VertexArray, 0)
@@ -85,6 +87,7 @@ func (g *Graph) read(br *bufio.Reader) (eof bool) {
 	return eof
 }
 
+// 打印图
 func (g *Graph) write(fout *os.File) {
 	mstr := make(map[string]bool)
 	for from, v := range g.VertexArray {
@@ -107,6 +110,7 @@ func (g *Graph) write(fout *os.File) {
 	}
 }
 
+// 检查图的构造合理性
 func (g *Graph) check() {
 	b := make([][]int, len(g.VertexArray))
 	for i := range b {

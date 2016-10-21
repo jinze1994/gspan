@@ -73,16 +73,19 @@ func Run() {
 }
 
 func report(projected Projected, sup int) {
-	if maxpat_max > maxpat_min && DFS_CODE.nodeCount() > maxpat_max {
-		return
-	}
-	if maxpat_min > 0 && DFS_CODE.nodeCount() < maxpat_min {
+	// if maxpat_max > maxpat_min && DFS_CODE.nodeCount() > maxpat_max {
+	// 	return
+	// }
+	// if maxpat_min > 0 && DFS_CODE.nodeCount() < maxpat_min {
+	// 	return
+	// }
+	if DFS_CODE.nodeCount() != 3 {
 		return
 	}
 	var g Graph
 	DFS_CODE.toGraph(&g)
 	os.Stdout.WriteString(fmt.Sprintf("t # %d * %d\n", ID, sup))
-	// ID++
+	ID++
 	g.write(os.Stdout)
 	os.Stdout.WriteString("\n")
 }
@@ -163,6 +166,6 @@ var ID int
 var TRANS []Graph
 var DFS_CODE DFSCode
 
-var minsup int = 50
+var minsup int = 2
 var maxpat_min int = 2
-var maxpat_max int = 100000
+var maxpat_max int = 3
