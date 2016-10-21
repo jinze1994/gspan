@@ -25,11 +25,14 @@ gspan
 	- `getForwardPure`
 	- `getBackward`
 	- `getForwardRoot`
-- `DFSCode`: DFSCode 的本质是图中所有边的信息在某种全序关系定义下的排列，每条边上记录 `vertex_id`, `vertex_label`, `edge_label`。图同构等价于 DFSCode 相同。全局变量 `DFS_CODE` 记录了当前正在处理（当前栈下）的频繁子图。
+
+- `DFSCode`: DFSCode 的本质是图中所有边的信息在某种全序关系定义下的排列，每条边上记录顶点 ID、顶点和边的 Label。图同构等价于 DFSCode 相同。全局变量 `DFS_CODE` 记录了当前正在处理（当前栈下）的频繁子图。
 	- `fromGraph(g *Graph)` 将一个图转换为 DFSCode
 	- `toGraph(g *Graph)` 将 DFSCode 转换为图
 	- `buildRMPath() []int` 在 DFSCode 上获取最右路径
+
 - `Projected`: 
+
 - `History`: 在递归过程中，
 
 
