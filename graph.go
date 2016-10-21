@@ -154,7 +154,41 @@ func BuildGraphFromFile(fileName string) (gs []Graph, err error) {
 	return gs, nil
 }
 
-func getForwardRoot(g *Graph, v *Vertex) (edgeList []*Edge) {
+func (g *Graph) getForwardRmpath(edge *Edge, minlabel int, his *History) (edgeList []*Edge) {
+	edgeList = make([]*Edge, 0)
+	assert(edge.from >= 0 && edge.from < len(g.VertexArray))
+	assert(edge.to >= 0 && edge.to < len(g.VertexArray))
+	tolabel := g.VertexArray[edge.to].label
+
+	for i, e := range g.VertexArray[edge.from].edge {
+		tolabel2 := g.VertexArray[e.to].label
+		if edge.to == e.to || minlabel > tolabel2 || his.hasVertec(e.to) {
+			continue
+		}
+		if edge.elabel < e.elabel || (edge.elabel == e.elabel && tolabel <= tolabel2) {
+			edgeList = append(edgeList, &g.VertexArray[edge.from].edge[i])
+		}
+	}
+
+	return edgeList
+}
+
+func (g *Graph) getForwardPure(edge *Edge, minlabel int, his *History) (edgeList []*Edge) {
+	edgeList = make([]*Edge, 0)
+	assert(edge.from >= 0 && edge.from < len(g.VertexArray))
+	assert(edge.to >= 0 && edge.to < len(g.VertexArray))
+
+	for i, e := range g.VertexArray[edge.to].edge {
+		if minlabel > g.VertexArray[e.to].label || his.hasVertec(e.to) {
+			continue
+		}
+		edgeList = append(edgeList, &g.VertexArray[edge.to].edge[i])
+	}
+
+	return edgeList
+}
+
+func (g *Graph) getForwardRoot(v *Vertex) (edgeList []*Edge) {
 	edgeList = make([]*Edge, 0)
 	for i, e := range v.edge {
 		assert(e.to >= 0 && e.to < len(g.VertexArray))
@@ -163,4 +197,26 @@ func getForwardRoot(g *Graph, v *Vertex) (edgeList []*Edge) {
 		}
 	}
 	return edgeList
+}
+
+func (g *Graph) getBackward(e1, e2 *Edge, his *History) *Edge {
+	if e1 == e2 {
+		return nil
+	}
+	assert(e1.from >= 0 && e1.from < len(g.VertexArray))
+	assert(e1.to >= 0 && e1.to < len(g.VertexArray))
+	assert(e2.from >= 0 && e2.from < len(g.VertexArray))
+	assert(e2.to >= 0 && e2.to < len(g.VertexArray))
+
+	for i, nei := range g.VertexArray[e2.to].edge {
+		if his.hasEdge(nei.id) || nei.to != e1.from {
+			continue
+		}
+		if e1.elabel < nei.elabel ||
+			(e1.elabel == nei.elabel && g.VertexArray[e1.to].label <= g.VertexArray[e2.to].label) {
+			return &g.VertexArray[e2.to].edge[i]
+		}
+	}
+
+	return nil
 }

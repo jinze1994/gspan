@@ -1,13 +1,26 @@
 package main
 
-import ()
+import "os"
 
-func TestReadGraph() {
+func CheckReadGraph() {
 	assert(len(TRANS) == 10000)
-
 	for _, g := range TRANS {
-		// g.write(os.Stdout)
 		g.check()
+	}
+}
+
+func PrintReadGraph() {
+	for _, g := range TRANS {
+		g.write(os.Stdout)
+	}
+}
+
+func PrintDFSCode() {
+	var dfs DFSCode
+	for _, g := range TRANS {
+		dfs.fromGraph(&g)
+		dfs.write(os.Stdout)
+		os.Stdout.WriteString("\n")
 	}
 }
 
@@ -16,5 +29,5 @@ func main() {
 	TRANS, err = BuildGraphFromFile("graph.data")
 	assert(err == nil, err)
 
-	TestReadGraph()
+	Run()
 }

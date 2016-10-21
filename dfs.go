@@ -32,7 +32,7 @@ func (dc *DFSCode) pop() {
 func (dc *DFSCode) fromGraph(g *Graph) {
 	*dc = make(DFSCode, 0)
 	for from, v := range g.VertexArray {
-		edgeList := getForwardRoot(g, &v)
+		edgeList := g.getForwardRoot(&v)
 		for _, e := range edgeList {
 			assert(e.from == from)
 			dc.push(from, e.to, g.VertexArray[e.from].label, e.elabel, g.VertexArray[e.to].label)
@@ -58,10 +58,10 @@ func (dc *DFSCode) toGraph(g *Graph) {
 	g.buildEdge()
 }
 
-func (dc DFSCode) nodeCount() int {
+func (dc *DFSCode) nodeCount() int {
 	nodeCount := 0
-	for i := 0; i < len(dc); i++ {
-		nodeCount = maxint(nodeCount, maxint(dc[i].from, dc[i].to)+1)
+	for i := 0; i < len(*dc); i++ {
+		nodeCount = maxint(nodeCount, maxint((*dc)[i].from, (*dc)[i].to)+1)
 	}
 	return nodeCount
 }
@@ -79,4 +79,16 @@ func (dc DFSCode) write(fout *os.File) {
 			fmt.Fprintf(fout, " %d (b%d)", dc[i].elabel, dc[i].to)
 		}
 	}
+}
+
+func (dc *DFSCode) buildRMPath() []int {
+	rmpath := make([]int, 0)
+	old_from := -1
+	for i := len(*dc) - 1; i >= 0; i-- {
+		if (*dc)[i].from < (*dc)[i].to && (len(rmpath) == 0 || old_from == (*dc)[i].to) {
+			rmpath = append(rmpath, i)
+			old_from = (*dc)[i].from
+		}
+	}
+	return rmpath
 }
