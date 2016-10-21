@@ -20,6 +20,19 @@ gspan
 重要数据结构说明
 ---
 
+- `Graph`: 图的邻接表数据结构，包含一列 `Vertex`，每个 `Vertex` 又回包含一列 `Edge`。全局变量 `TRANS` 记录了所有图。
+	- `getForwardRmpath`
+	- `getForwardPure`
+	- `getBackward`
+	- `getForwardRoot`
+- `DFSCode`: DFSCode 的本质是图中所有边的信息在某种全序关系定义下的排列，每条边上记录 `vertex_id`, `vertex_label`, `edge_label`。图同构等价于 DFSCode 相同。全局变量 `DFS_CODE` 记录了当前正在处理（当前栈下）的频繁子图。
+	- `fromGraph(g *Graph)` 将一个图转换为 DFSCode
+	- `toGraph(g *Graph)` 将 DFSCode 转换为图
+	- `buildRMPath() []int` 在 DFSCode 上获取最右路径
+- `Projected`: 
+- `History`: 在递归过程中，
+
+
 编译运行环境
 ---
 * go version >= go1.7
