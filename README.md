@@ -12,6 +12,18 @@ gspan
 
 运行说明
 ---
-```bash
-$ ./gspan [min_support] [min_node] [max_node]
 ```
+./gspan [min_support] [min_node] [max_node]
+```
+
+程序从标准输入读取图文件，向标准输出打印频繁子图。有以下三个可选参数
+
+* min_support: 输出的频繁子图应满足的最小支持度，默认为 2
+* min_node: 输出的频繁子图所具有的最小节点数，默认为 2
+* max_node: 输出的频繁子图所具有的最大节点数，默认为极大值
+
+程序文件结构
+---
+
+运行结果
+---
