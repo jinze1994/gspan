@@ -73,13 +73,10 @@ func Run() {
 }
 
 func report(projected Projected, sup int) {
-	// if maxpat_max > maxpat_min && DFS_CODE.nodeCount() > maxpat_max {
-	// 	return
-	// }
-	// if maxpat_min > 0 && DFS_CODE.nodeCount() < maxpat_min {
-	// 	return
-	// }
-	if DFS_CODE.nodeCount() != 3 {
+	if maxpat_max > maxpat_min && DFS_CODE.nodeCount() > maxpat_max {
+		return
+	}
+	if maxpat_min > 0 && DFS_CODE.nodeCount() < maxpat_min {
 		return
 	}
 	var g Graph
@@ -166,6 +163,6 @@ var ID int
 var TRANS []Graph
 var DFS_CODE DFSCode
 
-var minsup int = 2
+var minsup int = 8000
 var maxpat_min int = 2
-var maxpat_max int = 3
+var maxpat_max int = 100000

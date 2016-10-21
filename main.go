@@ -1,6 +1,11 @@
 package main
 
-import "os"
+import (
+	"fmt"
+	"os"
+	"strconv"
+	"time"
+)
 
 func CheckReadGraph() {
 	assert(len(TRANS) == 10000)
@@ -29,5 +34,13 @@ func main() {
 	TRANS, err = BuildGraphFromFile("graph.data")
 	assert(err == nil, err)
 
+	if len(os.Args) == 2 {
+		if m, err := strconv.Atoi(os.Args[1]); err == nil {
+			minsup = m
+		}
+	}
+
+	t := time.Now()
 	Run()
+	fmt.Println(time.Now().Sub(t))
 }
