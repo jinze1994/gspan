@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"math"
 )
 
@@ -27,11 +26,16 @@ func (p1 *ProjectedLabel) Less(p2 *ProjectedLabel) int {
 	}
 }
 
+type ProjectedLabelArray []ProjectedLabel
+
+func (a ProjectedLabelArray) Len() int           { return len(a) }
+func (a ProjectedLabelArray) Swap(i, j int)      { a[i], a[j] = a[j], a[i] }
+func (a ProjectedLabelArray) Less(i, j int) bool { return a[i].Less(&a[j]) < 0 }
+
 func isMin() bool {
 	if len(DFS_CODE) == 1 {
 		return true
 	}
-	fmt.Println("hello")
 	var gmin Graph
 	DFS_CODE.toGraph(&gmin)
 
@@ -94,6 +98,7 @@ func (projected *Projected) isMin(dcmin *DFSCode, gmin *Graph) bool {
 		return pl.Projected.isMin(dcmin, gmin)
 	}
 
+	flag = false
 	newfrom := 0
 	pl.rebuild(0, int(math.MaxInt32), int(math.MaxInt32))
 

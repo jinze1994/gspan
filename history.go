@@ -29,8 +29,8 @@ func newHistory(g *Graph, e *PDFS) (h *History) {
 			h.edge[p.edge.id], h.vertex[p.edge.from], h.vertex[p.edge.to] = 1, 1, 1
 		}
 
-		n := len(h.earray) / 2
-		for i := 0; i < n; i++ {
+		n := len(h.earray)
+		for i := 0; i < n/2; i++ {
 			h.earray[i], h.earray[n-i-1] = h.earray[n-i-1], h.earray[i]
 		}
 	}
