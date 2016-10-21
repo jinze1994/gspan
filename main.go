@@ -34,9 +34,21 @@ func main() {
 	TRANS, err = BuildGraphFromFile("graph.data")
 	assert(err == nil, err)
 
-	if len(os.Args) == 2 {
-		if m, err := strconv.Atoi(os.Args[1]); err == nil {
-			minsup = m
+	var tmp int
+	switch len(os.Args) {
+	case 4:
+		if tmp, err = strconv.Atoi(os.Args[3]); err != nil {
+			maxpat_max = tmp
+		}
+		fallthrough
+	case 3:
+		if tmp, err = strconv.Atoi(os.Args[2]); err != nil {
+			maxpat_min = tmp
+		}
+		fallthrough
+	case 2:
+		if tmp, err = strconv.Atoi(os.Args[1]); err != nil {
+			minsup = tmp
 		}
 	}
 
