@@ -31,7 +31,7 @@ gspan
 	- `toGraph(g *Graph)`: 将 `DFSCode` 转换为图
 	- `buildRMPath() []int`: 在 `DFSCode` 上获取最右路径，保存了最右路径上节点在 `DFSCode` 上的索引
 
-- `PDFS`: `PDFS` 的数据结构是一个链表，其本质代表了深度优先搜索中， `DFSCode` 在搜索栈中在某一个出现位置上的投影(projection)。由于每个 `child DFSCode` 都是在 `parent DFSCode` 上增加一条边的结果，如果将每个图或每个图的 `DFSCode` 保存在搜索栈中就会浪费大量空间，因此栈中只保存增加的边即 `PDFS.edge`，根据 `PDFS.prev` 的链表指针向前寻找可构造出该 `DFSCode` 每一条边的添加顺序。
+- `PDFS`: `PDFS` 的数据结构是一个链表，其本质代表了深度优先搜索中， `DFSCode` 在搜索栈中在某一个出现位置上的投影(projection)。由于每个 child DFSCode 都是在 parent DFSCode 上增加一条边的结果，如果将每个图或每个图的 `DFSCode` 保存在搜索栈中就会浪费大量空间。因此当前栈中只保存增加的边即 `PDFS.edge`，运行时根据 `PDFS.prev` 的链表指针向前寻找，即可构造出该 `DFSCode` 每一条边的添加顺序。
 
 - `Projected`: `Projected` 最主要的作用是在栈中保存所有的 `PDFS`，它是一个 `PDFS` 的数组。在递归调用的搜索栈中，每次传入一个 `Projected`，代表当前的 `DFSCode` 在所有原图中的“投影”（出现位置及每条边的被添加顺序），然后在所有原图的每个出现位置上尝试拓展相应的边，构造出下一层的很多 `Projected`，然后对这些 `Projected` 依次递归调用。
 
@@ -72,15 +72,16 @@ ismin():
 
 ```
 
-编译运行环境
+编译环境
 ---
 * go version >= go1.7
-* Intel(R) Xeon(R) CPU E5-2609 v3 @ 1.90GHz * 6
-* memory >= 4GB
 * arch linux x86_64 GNU/Linux (optional)
 
 运行结果
 ---
+* Intel(R) Xeon(R) CPU E5-2609 v3 @ 1.90GHz * 6
+* memory >= 4GB
+
 | 最小支持度 | 频繁子图个数 | 时间开销 |
 | --- | --- | --- |
 | 5000 | 26 | 6.82s |                                                                                                                                                                                              
