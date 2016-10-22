@@ -65,7 +65,7 @@ func Run() {
 		for edgelabel, m1 := range m2 {
 			for tolabel, p := range m1 {
 				DFS_CODE.push(0, 1, fromlabel, edgelabel, tolabel)
-				project(*p)
+				sub_mining(*p)
 				DFS_CODE.pop()
 			}
 		}
@@ -87,7 +87,7 @@ func report(projected Projected, sup int) {
 	os.Stdout.WriteString("\n")
 }
 
-func project(projected Projected) {
+func sub_mining(projected Projected) {
 	sup := support(projected)
 	if sup < minsup || isMin() == false {
 		return
@@ -130,7 +130,7 @@ func project(projected Projected) {
 	for to, m1 := range newBckRoot {
 		for elabel, p := range m1 {
 			DFS_CODE.push(maxtoc, to, -1, elabel, -1)
-			project(*p)
+			sub_mining(*p)
 			DFS_CODE.pop()
 		}
 	}
@@ -139,7 +139,7 @@ func project(projected Projected) {
 		for elabel, m1 := range m2 {
 			for tolabel, p := range m1 {
 				DFS_CODE.push(from, maxtoc+1, -1, elabel, tolabel)
-				project(*p)
+				sub_mining(*p)
 				DFS_CODE.pop()
 			}
 		}
