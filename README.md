@@ -81,9 +81,8 @@ ismin():
 ---
 ```
 go build
-./gspan [min_support] [min_node] [max_node]
+./gspan [min_support] [min_node] [max_node] <grata.data >result.data
 ```
-运行时从 graph.data 文件读入，需要该数据文件与程序位于同一目录下。
 
 运行结果
 ---
