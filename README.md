@@ -77,6 +77,14 @@ ismin():
 * go version >= go1.7
 * arch linux x86_64 GNU/Linux (optional)
 
+编译运行
+---
+```
+go build
+./gspan [min_support] [min_node] [max_node]
+```
+运行时从 graph.data 文件读入，需要该数据文件与程序位于同一目录下。
+
 运行结果
 ---
 * Intel(R) Xeon(R) CPU E5-2609 v3 @ 1.90GHz * 6
